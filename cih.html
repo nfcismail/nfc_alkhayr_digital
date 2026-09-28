@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020814" />
+  <title>Virement CIH — AL KHAYR DIGITAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#020814; --accent:#1e90ff; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:"Montserrat",system-ui,sans-serif;
+      min-height:100dvh;
+      background:linear-gradient(165deg,#01060f,#06122a 50%,#020814);
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      padding:28px 16px 40px;
+    }
+    .box {
+      width:100%; max-width:420px;
+      background:rgba(8,18,40,.75);
+      border:1px solid rgba(80,140,220,.28);
+      border-radius:28px;
+      padding:28px 22px;
+      text-align:center;
+      box-shadow:0 18px 50px rgba(0,0,0,.45);
+    }
+    .badge {
+      display:inline-block;
+      background:linear-gradient(135deg,#e31c23,#b01018);
+      padding:8px 16px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:.85rem;
+      margin-bottom:18px;
+    }
+    h1 { font-size:1.2rem; margin-bottom:8px; }
+    p.hint { color:rgba(255,255,255,.7); font-size:.85rem; margin-bottom:20px; line-height:1.5; }
+    .rib-img {
+      width:220px;
+      height:220px;
+      margin:0 auto 20px;
+      border-radius:16px;
+      background:#fff;
+      padding:12px;
+      display:block;
+      object-fit:contain;
+    }
+    .details {
+      text-align:left;
+      background:rgba(255,255,255,.05);
+      border-radius:16px;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .row { display:flex; flex-direction:column; gap:4px; }
+    .row span { font-size:.7rem; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.08em; }
+    .row strong { font-size:.9rem; word-break:break-all; line-height:1.35; }
+    .actions { display:flex; flex-direction:column; gap:10px; }
+    .copy {
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      font-family:inherit;
+      font-weight:700;
+      font-size:.85rem;
+      padding:14px;
+      border-radius:999px;
+      cursor:pointer;
+      width:100%;
+    }
+    .copy.secondary {
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .back {
+      display:inline-block;
+      margin-top:16px;
+      color:rgba(255,255,255,.7);
+      font-size:.85rem;
+      text-decoration:none;
+    }
+    .back:hover { color:#fff; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="badge">CIH Bank</div>
+    <h1>Virement Bancaire</h1>
+    <p class="hint">Scannez le QR ou copiez le RIB / IBAN pour payer AL KHAYR DIGITAL.</p>
+
+    <img class="rib-img" src="cih-qr.png" alt="QR Code CIH Bank — Mohamed Ouhairich" />
+
+    <div class="details">
+      <div class="row">
+        <span>Titulaire</span>
+        <strong>MONSIEUR MOHAMED OUHAIRICH</strong>
+      </div>
+      <div class="row">
+        <span>N° de compte</span>
+        <strong>4258092211013800</strong>
+      </div>
+      <div class="row">
+        <span>RIB</span>
+        <strong id="rib">230 320 4258092211013800 18</strong>
+      </div>
+      <div class="row">
+        <span>IBAN</span>
+        <strong id="iban">MA64 2303 2042 5809 2211 0138 0018</strong>
+      </div>
+      <div class="row">
+        <span>Code SWIFT</span>
+        <strong>CIHMMAMC</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="copy" type="button" id="copyRib">Copier le RIB</button>
+      <button class="copy secondary" type="button" id="copyIban">Copier l'IBAN</button>
+    </div>
+    <a class="back" href="index.html">← Retour</a>
+  </div>
+
+  <script>
+    const RIB = "230 320 4258092211013800 18";
+    const IBAN = "MA64 2303 2042 5809 2211 0138 0018";
+
+    async function copyText(text, btn, okLabel) {
+      try {
+        await navigator.clipboard.writeText(text.replace(/\s/g, ""));
+        const old = btn.textContent;
+        btn.textContent = okLabel;
+        setTimeout(() => { btn.textContent = old; }, 2000);
+      } catch {
+        alert(text);
+      }
+    }
+
+    document.getElementById("copyRib").addEventListener("click", (e) => {
+      copyText(RIB, e.currentTarget, "RIB copié ✓");
+    });
+    document.getElementById("copyIban").addEventListener("click", (e) => {
+      copyText(IBAN, e.currentTarget, "IBAN copié ✓");
+    });
+  </script>
+</body>
+</html>
