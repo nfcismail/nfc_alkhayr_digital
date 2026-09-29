@@ -15,8 +15,8 @@
       --bg-mid: #06122a;
       --accent: #1e90ff;
       --accent-soft: #3ba3ff;
-      --glass: rgba(8, 18, 40, 0.82);
-      --glass-border: rgba(80, 140, 220, 0.35);
+      --glass: rgba(8, 12, 22, 0.86);
+      --glass-border: rgba(255, 255, 255, 0.12);
       --text: #ffffff;
       --muted: rgba(255, 255, 255, 0.72);
       --radius-card: 28px;
@@ -37,7 +37,7 @@
     body {
       font-family: "Montserrat", system-ui, sans-serif;
       color: var(--text);
-      background-color: #01060f;
+      background-color: #000;
       min-height: 100dvh;
       display: flex;
       justify-content: center;
@@ -47,33 +47,92 @@
       position: relative;
     }
 
-    body::before,
-    body::after {
-      content: "";
+    /* Official product photography layers */
+    .bg-scene {
       position: fixed;
       inset: 0;
-      pointer-events: none;
       z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: #000;
     }
 
-    /* Store photo background */
-    body::before {
+    .bg-scene .shot {
+      position: absolute;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* iPhone 17 Pro official lineup */
+    .bg-scene .shot-iphone {
+      inset: 0;
+      background-image: url("bg-iphone17.jpg");
+      transform: scale(1.04);
+      animation: bgDrift 22s ease-in-out infinite alternate;
+    }
+
+    /* MacBook Air M4 lineup — bottom band */
+    .bg-scene .shot-mac {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 46%;
+      background-image: url("bg-macbook.jpg");
+      background-position: center 35%;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 100%);
+      opacity: 0.95;
+    }
+
+    /* Galaxy S25 Ultra accent */
+    .bg-scene .shot-samsung {
+      right: -6%;
+      bottom: 8%;
+      width: min(46vw, 220px);
+      height: min(58vw, 280px);
+      background-image: url("bg-samsung.jpg");
+      background-position: center 20%;
+      border-radius: 22px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+      opacity: 0.9;
+      -webkit-mask-image: linear-gradient(135deg, #000 55%, transparent 100%);
+      mask-image: linear-gradient(135deg, #000 55%, transparent 100%);
+    }
+
+    /* Cosmic Orange iPhone 17 accent */
+    .bg-scene .shot-orange {
+      left: -8%;
+      top: 12%;
+      width: min(48vw, 230px);
+      height: min(58vw, 280px);
+      background-image: url("bg-iphone17-orange.jpg");
+      background-position: center;
+      border-radius: 22px;
+      opacity: 0.88;
+      -webkit-mask-image: linear-gradient(225deg, #000 50%, transparent 100%);
+      mask-image: linear-gradient(225deg, #000 50%, transparent 100%);
+    }
+
+    .bg-scene .veil {
+      position: absolute;
+      inset: 0;
       background:
-        url("bg-store.png") center center / cover no-repeat;
-      transform: scale(1.02);
-      animation: bgKen 18s ease-in-out infinite alternate;
+        radial-gradient(ellipse 85% 65% at 50% 38%, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.62) 72%, rgba(0, 0, 0, 0.82) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.72) 100%);
     }
 
-    /* Dark overlay so content stays readable */
-    body::after {
-      background:
-        linear-gradient(180deg, rgba(1, 6, 15, 0.55) 0%, rgba(1, 8, 20, 0.72) 45%, rgba(1, 6, 15, 0.82) 100%),
-        radial-gradient(ellipse 70% 55% at 50% 20%, rgba(0, 120, 255, 0.12), transparent 65%);
+    @keyframes bgDrift {
+      from { transform: scale(1.04) translate3d(0, 0, 0); }
+      to { transform: scale(1.09) translate3d(0, -1.2%, 0); }
     }
 
-    @keyframes bgKen {
-      from { transform: scale(1.02); }
-      to { transform: scale(1.08); }
+    @media (max-width: 420px) {
+      .bg-scene .shot-samsung,
+      .bg-scene .shot-orange {
+        width: 42vw;
+        height: 52vw;
+      }
     }
 
     .page {
@@ -200,10 +259,13 @@
       flex-shrink: 0;
     }
 
-    .link-left svg,
-    .link-right svg {
+    .link-left svg {
       width: 22px;
       height: 22px;
+      display: block;
+    }
+
+    .link-right svg {
       display: block;
     }
 
@@ -235,12 +297,6 @@
       object-fit: contain;
       padding: 3px;
       box-sizing: border-box;
-    }
-
-    .link-right .mini {
-      width: 16px;
-      height: 16px;
-      opacity: 0.95;
     }
 
     .chevron {
@@ -436,6 +492,13 @@
   </style>
 </head>
 <body>
+  <div class="bg-scene" aria-hidden="true">
+    <div class="shot shot-iphone"></div>
+    <div class="shot shot-mac"></div>
+    <div class="shot shot-orange"></div>
+    <div class="shot shot-samsung"></div>
+    <div class="veil"></div>
+  </div>
   <main class="page">
     <header class="brand">
       <div class="brand-avatars">
@@ -452,8 +515,7 @@
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
         </span>
         <span class="link-label">Localisation</span>
-        <span class="link-right" aria-hidden="true">
-          <svg class="mini" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -463,8 +525,7 @@
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
         </span>
         <span class="link-label">Suivez-nous sur Instagram</span>
-        <span class="link-right" aria-hidden="true">
-          <svg class="mini" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -474,8 +535,7 @@
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.96L0 24l6.3-1.65a11.86 11.86 0 0 0 5.76 1.47h.01c6.55 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.45-8.44zM12.06 21.75h-.01a9.84 9.84 0 0 1-5.01-1.37l-.36-.21-3.74.98 1-3.65-.24-.37a9.84 9.84 0 0 1-1.51-5.24c0-5.43 4.42-9.85 9.86-9.85 2.63 0 5.1 1.03 6.96 2.89a9.8 9.8 0 0 1 2.88 6.97c0 5.43-4.42 9.85-9.83 9.85zm5.4-7.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.19 5.06 4.47.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z"/></svg>
         </span>
         <span class="link-label">Suivez-nous sur WhatsApp</span>
-        <span class="link-right" aria-hidden="true">
-          <svg class="mini" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.96L0 24l6.3-1.65a11.86 11.86 0 0 0 5.76 1.47h.01c6.55 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.45-8.44zM12.06 21.75h-.01a9.84 9.84 0 0 1-5.01-1.37l-.36-.21-3.74.98 1-3.65-.24-.37a9.84 9.84 0 0 1-1.51-5.24c0-5.43 4.42-9.85 9.86-9.85 2.63 0 5.1 1.03 6.96 2.89a9.8 9.8 0 0 1 2.88 6.97c0 5.43-4.42 9.85-9.83 9.85zm5.4-7.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.95 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.19 5.06 4.47.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z"/></svg>
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -485,8 +545,7 @@
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.02H7.9v-2.91h2.4V9.84c0-2.37 1.41-3.68 3.57-3.68 1.04 0 2.12.18 2.12.18v2.33h-1.2c-1.18 0-1.55.73-1.55 1.48v1.78h2.64l-.42 2.91h-2.22V22c4.78-.75 8.44-4.91 8.44-9.93z"/></svg>
         </span>
         <span class="link-label">Suivez-nous sur Facebook</span>
-        <span class="link-right" aria-hidden="true">
-          <svg class="mini" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.02H7.9v-2.91h2.4V9.84c0-2.37 1.41-3.68 3.57-3.68 1.04 0 2.12.18 2.12.18v2.33h-1.2c-1.18 0-1.55.73-1.55 1.48v1.78h2.64l-.42 2.91h-2.22V22c4.78-.75 8.44-4.91 8.44-9.93z"/></svg>
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -496,19 +555,17 @@
           <img class="brand-icon" src="icon-tiktok.png" alt="" width="34" height="34" />
         </span>
         <span class="link-label">Suivez-nous sur TikTok</span>
-        <span class="link-right" aria-hidden="true">
-          <img class="brand-icon mini" src="icon-tiktok.png" alt="" width="18" height="18" />
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
 
       <a class="link website" href="https://www.alkhayr.digital/" target="_blank" rel="noopener noreferrer">
         <span class="link-left" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 14L20 4M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg>
         </span>
         <span class="link-label">Site Web</span>
-        <span class="link-right" aria-hidden="true">
-          <svg class="mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 14L20 4M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg>
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -518,8 +575,7 @@
           <img class="brand-icon" src="icon-cih.png" alt="" width="34" height="34" />
         </span>
         <span class="link-label">Virement Bancaire (CIH)</span>
-        <span class="link-right" aria-hidden="true">
-          <img class="brand-icon mini" src="icon-cih.png" alt="" width="18" height="18" />
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -529,8 +585,7 @@
           <img class="brand-icon" src="icon-saham.png" alt="" width="34" height="34" />
         </span>
         <span class="link-label">Virement Bancaire Saham Bank</span>
-        <span class="link-right" aria-hidden="true">
-          <img class="brand-icon mini" src="icon-saham.png" alt="" width="18" height="18" />
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -540,8 +595,7 @@
           <img class="brand-icon" src="icon-attijari.jpg" alt="" width="34" height="34" />
         </span>
         <span class="link-label">Virement Bancaire Attijariwafa bank</span>
-        <span class="link-right" aria-hidden="true">
-          <img class="brand-icon mini" src="icon-attijari.jpg" alt="" width="18" height="18" />
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
@@ -551,8 +605,7 @@
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
         </span>
         <span class="link-label">Laissez-nous un avis</span>
-        <span class="link-right" aria-hidden="true">
-          <svg class="mini" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <span class="link-right" aria-hidden="true">
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </span>
       </a>
